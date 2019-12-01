@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>My Blockly</title>
+	<script type="text/javascript" src="../blockly_compressed.js"></script>
+	<script type="text/javascript" src="../blocks_compressed.js"></script>
+	<script type="text/javascript" src="../msg/js/en.js"></script>
+	<script type="text/javascript" src="../blocks/customized.js"></script>
+	<script type="text/javascript" src="../blocks/math.js"></script>
+	<script type="text/javascript" src="../blocks/codebox.js"></script>
+
+	<script type="text/javascript" src="../javascript_compressed.js"></script>
+	<script type="text/javascript" src="../generators/javascript/customized.js"></script>
+	<script type="text/javascript" src="../generators/javascript/math.js"></script>
+	<script type="text/javascript" src="../generators/javascript/codebox.js"></script>
+
+	<style>
+		html, body {
+			height: 90%;
+			margin: 0;
+		}
+		body {
+			background-color: #fff;
+			font-family: sans-serif;
+			overflow: hidden;
+		}
+		h2 {
+			font-weight: normal;
+			font-size: 140%;
+		}
+		table {
+			height: 99%;
+			width: 99%;
+		}
+		#blocklyArea {
+			height: 100%;
+			width: 60%;
+		}
+		textarea {
+			height: 100%;
+			width: 40%;
+		}
+	</style>
+</head>
+<body>
+	<table>
+		<tr>
+			<td>
+				<h2 div="swName">This is a blockly controller of Arduino based robot
+					<button onclick="runCode()">START</button>
+				</h2>
+			</td>
+		</tr>
+		<tr>
+			<td id="blocklyArea">
+				<div id="blocklyDiv"></div>
+
+				<xml id="toolbox" style="display: none">
+					<category name="Default" colour="160">
+						<block type="controls_if"></block>
+						<block type="logic_compare"></block>
+						<block type="controls_repeat_ext"></block>
+						<block type="math_number"></block>
+						<block type="math_arithmetic"></block>
+						<block type="text"></block>
+						<block type="text_print"></block>
+					</category>
+					<category name="Custom" colour="330">
+						<block type="my_alert"></block>
+						<block type="logic_boolean"></block>
+					</category>
+					<sep></sep>
+					<!-- <category name="Colour" colour="20">
+						<block type="colour_picker"></block>
+						<block type="colour_random"></block>
+						<block type="colour_rgb"></block>
+						<block type="colour_blend"></block>
+					</category>					
+					<category name="Lists" colour="260">
+						<block type="lists_create_empty"></block>
+						<block type="lists_create_with"></block>
+						<block type="lists_create_with_container"></block>
+						<block type="lists_create_with_item"></block>
+						<block type="lists_repeat"></block>
+						<block type="lists_length"></block>
+						<block type="lists_isEmpty"></block>
+						<block type="lists_indexOf"></block>
+						<block type="lists_getIndex"></block>
+						<block type="lists_setIndex"></block>
+						<block type="lists_getSublist"></block>
+						<block type="lists_sort"></block>
+						<block type="lists_split"></block>
+					</category> -->
+					<category name="Logic" colour="210">
+						<block type="controls_if"></block>
+						<block type="logic_compare"></block>
+						<block type="logic_operation"></block>
+						<block type="logic_negate"></block>
+						<block type="logic_boolean"></block>
+						<block type="logic_null"></block>
+						<block type="logic_ternary"></block>
+					</category>
+					<category name="Loops" colour="290">
+						<block type="controls_repeat_ext"></block>
+						<block type="controls_repeat"></block>
+						<block type="controls_whileUntil"></block>
+						<block type="controls_for"></block>
+						<block type="controls_forEach"></block>
+						<block type="controls_flow_statements"></block>
+					</category>
+					<category name="Math" colour="230">
+						<block type="math_number"></block>
+						<block type="math_arithmetic"></block>
+						<block type="math_single"></block>
+						<block type="math_constant"></block>
+						<block type="math_number_property"></block>
+						<block type="math_change"></block>
+						<block type="math_on_list"></block>
+						<block type="math_modulo"></block>
+						<block type="math_constrain"></block>
+						<block type="math_random_int"></block>
+						<block type="math_random_float"></block>
+					</category>
+					<!-- <category name="Procedures" colour="290">
+						<block type="procedures_defnoreturn"></block>
+						<block type="procedures_defreturn"></block>
+						<block type="procedures_mutatorcontainer"></block>
+						<block type="procedures_mutatorarg"></block>
+						<block type="procedures_callnoreturn"></block>
+						<block type="procedures_callreturn"></block>
+						<block type="procedures_ifreturn"></block>
+					</category>
+					<category name="Text" colour="160">
+						<block type="text"></block>
+						<block type="text_join"></block>
+						<block type="text_create_join_container"></block>
+						<block type="text_create_join_item"></block>
+						<block type="text_append"></block>
+						<block type="text_length"></block>
+						<block type="text_isEmpty"></block>
+						<block type="text_indexOf"></block>
+						<block type="text_charAt"></block>
+						<block type="text_getSubstring"></block>
+						<block type="text_changeCase"></block>
+						<block type="text_trim"></block>
+						<block type="text_print"></block>
+						<block type="text_prompt_ext"></block>
+						<block type="text_prompt"></block>
+					</category> -->
+					<category name="Variables" colour="330">
+						<block type="variables_get"></block>
+						<block type="variables_set"></block>
+					</category>															
+					<sep></sep>					
+					<category name="Codebox" colour="120">
+						<block type="codebox_forward"></block>
+						<block type="codebox_backward"></block>
+						<block type="codebox_turnleft"></block>
+						<block type="codebox_turnright"></block>
+						<block type="codebox_leftspin"></block>
+						<block type="codebox_rightspin"></block>
+						<block type="codebox_stop"></block>
+					</category>
+				</xml>
+			</td>
+			<td id="codeBoard">
+				<textarea id="textarea">generated code</textarea>
+			</td>
+		</tr>
+	</table>
+
+	<script type="text/javascript">
+		var blocklyArea = document.getElementById('blocklyArea');
+		var blocklyDiv = document.getElementById('blocklyDiv');
+		var workspace = Blockly.inject(blocklyDiv,
+			{toolbox: document.getElementById('toolbox'),
+			 media: '../media/',
+			 trashcan: true});
+
+		var onresize = function (e) {
+			var element = blocklyArea;
+			var x = 0;
+			var y = 0;
+			
+			// do {
+			// 	x += element.offsetLeft;
+			// 	y += element.offsetTop;
+			// 	element = element.offsetParent;
+			// } while (element);
+			var textarea = document.getElementById("textarea");
+			var text = document.getElementById("swName");
+			//blocklyDiv.style.left = x + 'px';
+			//blocklyDiv.style.top = y + 'px';
+			blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+			blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+			textarea.style.height = blocklyDiv.style.height;
+		};
+
+		window.addEventListener('resize', onresize, false);
+		onresize();
+		Blockly.svgResize(workspace);
+
+		function showCode () {
+			Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+			Blockly.JavaScript.addReservedWords('code');
+
+			var code = Blockly.JavaScript.workspaceToCode(workspace);
+
+			document.getElementById('codeBoard').getElementsByTagName('textarea')[0].value = code;
+		}
+
+		workspace.addChangeListener(showCode);
+
+		function runCode () {
+			Blockly.JavaScript.addReservedWords('code');
+
+			var code = Blockly.JavaScript.workspaceToCode(workspace);
+
+			try {
+				eval(code);
+			} catch (e) {
+				alert(e);
+			}
+		}
+	</script>
+</body>
+</html>
