@@ -63,7 +63,7 @@ five.Board(board).on('ready', function() {
     if(flag == 0){
       json += eval(codigo);
       res.json("Compilación correcta");
-      console.log("entrp");
+      //console.log("entro");
     }if(flag == 1){
       res.send(errorMsg);
     }
@@ -75,4 +75,3 @@ const port = process.env.PORT || 3000;
 
 server.listen(port);
 console.log(`Server listening on http://localhost:${port}`);
-

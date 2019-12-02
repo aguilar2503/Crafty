@@ -81,10 +81,11 @@
             <h2 div="swName">
               <button onclick="correr()" class="btn btn-success">Correr</button>
               <button onclick="cleanConsole()" class="btn btn-info">Limpiar consola</button>
-              <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal">Codigo maquina</button>
-              <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal2"> Codigo intermedio</button>
-              <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal3"> Codigo optimizado</button>
+              <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal" id="btnMaquina">Codigo maquina</button>
+              <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal2" id="btnIntermedio"> Codigo intermedio</button>
+              <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal3" id="btnOptimizado"> Codigo optimizado</button>
               <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal4" id="parse"> Analisis léxico</button>
+              <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal5" id="btnAutomata"> Ver Autómata</button>
             </h2>
         </div>
       </div>
@@ -217,7 +218,7 @@
                       </xml>	
                     </td>
                     <td id="codeBoard" > 
-                      <textarea id="editor" >
+                      <textarea id="editor">
                       </textarea>
                     </td>
                   </tr>
@@ -225,7 +226,6 @@
           </div>
           <div class="row">
             <div class="col-md-12" style="margin-top:-30px;background-color:black ; color: white; height: 30vh; overflow:scroll;" id="console">
-              
             </div>
           </div>
       </div>
@@ -235,8 +235,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   
   <script>
-    
-  
+    deshabilitarBtns();
+    desactivarAutomata();
   var blocklyArea = document.getElementById('blocklyArea');
 		var blocklyDiv = document.getElementById('blocklyDiv');
 		var workspace = Blockly.inject(blocklyDiv,
@@ -263,6 +263,8 @@
     workspace.addChangeListener(showCode);
     
     function cleanConsole(){
+      deshabilitarBtns();
+      desactivarAutomata();
       $("#console").empty();
     }
 
@@ -277,18 +279,42 @@
                         url: 'http://localhost:3000/uri',						
                         success: function(data) {
                             //console.log('success');
+                            cleanConsole();
                             $("#console").append(data);
+                              habilitarBtns();
+                              desactivarAutomata();
                             
                         },error: function(error){
                           //alert(error.responseText);
                           $("#console").empty();
                           $("#console").append("<br> >>"+error.responseText+"<br>");
-                          
+                          activarAutomata();
                         }
                     });
       
     }
 
+    function activarAutomata(){
+      $('#btnAutomata').attr("disabled", false);
+    }
+
+    function desactivarAutomata(){
+      $('#btnAutomata').attr("disabled", true);
+    }
+
+    function deshabilitarBtns(){
+      $('#btnMaquina').attr("disabled", true);
+      $('#btnOptimizado').attr("disabled", true);
+      $('#btnIntermedio').attr("disabled", true);
+      $('#parse').attr("disabled", true);
+    }
+
+    function habilitarBtns(){
+      $('#btnMaquina').attr("disabled", false);
+      $('#btnOptimizado').attr("disabled", false);
+      $('#btnIntermedio').attr("disabled", false);
+      $('#parse').attr("disabled", false);
+    }
 
   </script>
 
@@ -658,7 +684,10 @@ END MAIN
               </button>
             </div>
             <div class="modal-body">
-              ...
+              <div id="codeBoard" > 
+                <textarea id="analisisLex" >
+                </textarea>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -666,6 +695,25 @@ END MAIN
           </div>
         </div>
       </div>
+
+      <div class="modal fade" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" >
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Análisis Léxico</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <img src="media/automata.png" alt="" style="width: 100%;">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
 </body>

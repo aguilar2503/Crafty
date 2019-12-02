@@ -1,4 +1,5 @@
-var error = function (message, t) {
+
+  Object.constructor.error = function (message, t) {
   
     t = t || this;
     t.name = " Syntax Error ";
@@ -8,21 +9,23 @@ var error = function (message, t) {
   
   function main() {
   
-    var parse = make_parse();
+    //var parse = make_parse();
     
     var source = document.getElementById('codeBoard').getElementsByTagName('textarea')[0].value;;
     var string, tree;
       
     try {
-      tree = parse(source);
-      string = JSON.stringify(tree, ['key', 'name', 'message',
-                                     'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
+      tree = source.tokens();
+      string = JSON.stringify(tree, null, 6);
+                                     
     } catch (e) {
-      string = JSON.stringify(e, ['name', 'message', 'from', 'to', 'key',
-                                    'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
+      string = JSON.stringify(e, null, 6);
     }
     
-    console.log(string.replace(/&/g, '&amp;').replace(/[<]/g, '&lt;'));
+    var data = string;
+    console.log(data);
+    
+    document.getElementById('analisisLex').value= data;
   
   };
 
